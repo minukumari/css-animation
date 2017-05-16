@@ -1,0 +1,45 @@
+$n-links: 8;
+$ba: 360deg/$n-links;
+$w: 2em;
+$h: .375em;
+$d: .75em;
+$r: .5*$d;
+
+html { overflow: hidden }
+
+div, :before, :after { position: absolute }
+
+.comp {
+	--j: 0;
+	top: 50%; left: 50%;
+	animation: r 10s linear infinite;
+	
+	&:nth-child(2n) { --j: 1 }
+}
+
+@keyframes r { to { transform: rotate(calc((1 - 2*var(--j))*1turn)) } }
+
+.link {
+	box-sizing: border-box;
+	margin: -.5*$h (-.5*$w); 
+	padding: 0 $d/3;
+	width: $w; height: $h;
+	transform: rotate(calc(var(--i, 0)*#{$ba}))
+		translate(calc((var(--j) + 2*var(--k, 0) + 1)*#{$w + $d}));
+	background: #000 content-box;
+	
+	&:nth-child(n + #{$n-links + 1}) { --k: 1 }
+	
+	@for $i from 1 to $n-links { &:nth-child(#{$n-links}n + #{$i + 1}) { --i: $i } }
+	
+	&:before, &:after {
+		top: calc(50% - #{$r});
+		left: calc(var(--s, 0)*100% - #{$r});
+		width: $d; height: $d;
+		border-radius: 50%;
+		box-shadow: inset 0 0 0 $d/3;
+		content: ''
+	}
+	
+	&:after { --s: 1 }
+}
